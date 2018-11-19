@@ -2,8 +2,6 @@
 (require srfi/25)
 ;;We will use the srfi package for multidimensional arrays, it acts much like the vector package and we can use make-array and array-set! for mutable arrays
 ;;We can make our parse tables using this
-(require typed-stack)
-;;This is a stack library we might want to use to implement our stack
 
 
 
@@ -28,6 +26,10 @@
 ;;with at least 3 inputs: the EBNF spec, a list of terminals (basically reserved symbols) and an error procedure (or maybe select an option from a list of error handling options)
 
 
+;take in a grammar spec, a set of tokens, and a set of allowed terminals, and generate an intermediate grammar that can be directly used to compute follow sets, configurations, and ultimately parse tables
+(define (generate-grammar grammar tokens terminals ...)
+  ...)
+
 
 
 ;;-----------------------------------------BUILD TABLES AND STATES--------------------------------
@@ -41,6 +43,27 @@
 ;;we need to figure out how to do that
 
 
+
+
+
+;Add a new action to the action table
+;Will have to do on-the-fly table compression here, unless we want to go the route of building a bulky LR table and then compress statically...this is a design choice! 
+(define (add-action state symbol nextAction)
+  ...)
+
+
+;Build our action table...if we are building our tables with on-the-fly compression, we might need to be careful with how we initialize the table structs....
+(define (build-action-table ...)
+  ...)
+
+
+;Build our GoTo table....
+(define (build-goto-table ...)
+  ...)
+
+;A function to be called when we add an action: searches for any sufficiently similar states such that we can merge states + compress table
+(define (find-compressable ...)
+  ...)
 
 
 ;;----------------------------------------EXPORT--------------------------------------------------
