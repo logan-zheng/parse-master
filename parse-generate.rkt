@@ -25,6 +25,28 @@
 ;;Here we can read input and parse the grammar specifications needed.  We will need the user to call a function from this section
 ;;with at least 3 inputs: the EBNF spec, a list of terminals (basically reserved symbols) and an error procedure (or maybe select an option from a list of error handling options)
 
+;;An example EBNF might be as follows, for a simple case
+
+;; <FWAE> :: <num>
+;;         | {+ <FWAE> <FWAE>}
+;;         | {with {<id> <FWAE>} <FWAE>}
+;;         | <id>
+;;         | {fun {<id>} <FWAE>}           ; DONE
+;;         | {<FWAE> <FWAE>}
+
+;;What would this be translated to?
+
+;;(<FWAE> (<num>)
+;;        (+ <FWAE> <FWAE>)
+;;        (with {<id> <FWAE>} <FWAE>)
+;;        (<id>)
+;;        (fun <id> <FWAE>)
+;;        (<FWAE> <FWAE>))
+
+;;List of terminals: (<id>, <num>, +, with, fun)n
+
+(define terminals)
+(define grammar)
 
 ;take in a grammar spec, a set of tokens, and a set of allowed terminals, and generate an intermediate grammar that can be directly used to compute follow sets, configurations, and ultimately parse tables
 (define (generate-grammar grammar tokens terminals ...)
@@ -42,8 +64,12 @@
 ;;lookback-state and lookahead state, and the function get-action will return the result of applying this to the action table so the stack knows what to do next.  This will need to be exported as part of the parser though....so
 ;;we need to figure out how to do that
 
-
-
+;returns a configurating set for a single production and is called once for every new state added to the actiont table
+;takes as argument a single production
+;depends upon the global vars "terminals" and "grammar"
+;the returned configurating set will be of the form {{production} {production} {production}....} where all productions correspond to equivalent states in the parse
+(define (build-closure production)
+  )
 
 
 ;Add a new action to the action table
