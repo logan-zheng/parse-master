@@ -64,12 +64,37 @@
 ;;lookback-state and lookahead state, and the function get-action will return the result of applying this to the action table so the stack knows what to do next.  This will need to be exported as part of the parser though....so
 ;;we need to figure out how to do that
 
-;returns a configurating set for a single production and is called once for every new state added to the actiont table
-;takes as argument a single production
+
+(define (terminal? token)
+  (if (member token terminals)
+      #t
+      #f))
+
+;Given a nonTerminal token, this function searches the modified grammar for all the productions of this token, and returns them as a list of lists
+(define (search-productions token)
+  ...)
+
+;returns a configurating set for a single production and is called once for every new state added to the action table
+;takes as arguments a single production and a position "pos" that marks the index of the current parse location
 ;depends upon the global vars "terminals" and "grammar"
 ;the returned configurating set will be of the form {{production} {production} {production}....} where all productions correspond to equivalent states in the parse
-(define (build-closure production)
-  )
+(define (build-closure production pos)
+  (define (helper production pos configSet)
+    (local [(define nextToken (list-ref production pos))
+            (define isNonTerminal (not (terminal? nextToken)))
+            (define productionsOfToken (search-productions nextToken))
+            (define (searchFirstProduction production configSet)
+              (if (member production configSet)
+                  (configSet)
+                  (helper production 0 (cons configSet production))))
+            (define (searchRestProductions productions configSet)
+              (if (empty? productions)
+                  (configSet)
+                  (append (helper (first productions) 0 configSet) (searchRestProductions (rest productions) (configSet)))))]
+      (if (isNonTerminal)     ;search the grammar for productions, and recursively explore a production unless it is in the configSet already
+          (remove-duplicates (append (searchFirstProduction (first productionsOfToken) configSet) (searchRestProductions (rest productionsOfToken configSet)))) 
+          ((cons configSet production)))))
+  (helper production pos '{}))
 
 
 ;Add a new action to the action table
