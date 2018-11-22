@@ -134,4 +134,9 @@
 
 ;;----------------------------------------EXPORT--------------------------------------------------
 ;We will probably want to have a way to export the parser and the tables we have generated to an external file so this generator will only
-;need to be run once for any new language.  The exported parser should only have the stack implementation, lexical analyser and input/output, and the tables can be written to their own file and imported in the parser
+;need to be run once for any new language.  The exported parser should only have the stack implementation, lexical analyser and input/output,
+;;and the tables can be written to their own file and imported in the parser
+
+
+;;----------------------------------------TESTS----------------------------------------------------
+(test (build-closure (gvector + AE AE) 0) (gvector ((gvector + AE AE))))
