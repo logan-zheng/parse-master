@@ -1,5 +1,4 @@
 #lang plai
-(require data/gvector)
 ;;We will use the srfi package for multidimensional arrays, it acts much like the vector package and we can use make-array and array-set! for mutable arrays
 ;;We can make our parse tables using this
 
