@@ -1,4 +1,5 @@
 #lang plai
+(require data/gvector)
 ;;We will use the srfi package for multidimensional arrays, it acts much like the vector package and we can use make-array and array-set! for mutable arrays
 ;;We can make our parse tables using this
 
@@ -44,8 +45,23 @@
 
 ;;List of terminals: (<id>, <num>, +, with, fun)
 
+;;Our example grammar will be a gvector with the following EBNF
+;;<AE> :: <num>
+;;      | {+ <AE> <AE>}
+;;      | {- <AE> <AE>}
+;;      | {* <AE> <AE>}
+;;And will have the following gvector representation
+;;(AE ((num)
+;;     (+ AE AE)
+;;     (- AE AE)
+;;     (* AE AE))
+;;)
+
 (define terminals)
-(define grammar)
+(define grammar (gvector (gvector AE (gvector (gvector num)
+                                              (gvector + AE AE)
+                                              (gvector - AE AE)
+                                              (gvector * AE AE)))))
 
 ;take in a grammar spec, a set of tokens, and a set of allowed terminals, and generate an intermediate grammar that can be directly used to compute follow sets, configurations, and ultimately parse tables
 (define (generate-grammar grammar tokens terminals ...)
