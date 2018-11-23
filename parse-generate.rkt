@@ -25,8 +25,7 @@
                    (cons (stack-shift stack (first input))
                         (setup-helper (rest input) stack))]
                   [(member (first input) reduce-consts)
-                   (cons (stack-reduce stack (first input))
-                         (setup-helper (rest input) stack))]
+                   (setup-helper (rest input) (stack-reduce stack))]
                   [else
                    (cons (first input)
                          (setup-helper (rest input) stack))]))]
