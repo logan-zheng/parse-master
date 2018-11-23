@@ -22,8 +22,7 @@
             ...)
           (define (setup-helper input stack)
             (cond [(member (first input) shift-consts)
-                   (cons (stack-shift stack (first input))
-                        (setup-helper (rest input) stack))]
+                   (setup-helper (rest input) (stack-shift stack (first input)))]
                   [(member (first input) reduce-consts)
                    (setup-helper (rest input) (stack-reduce stack))]
                   [else
