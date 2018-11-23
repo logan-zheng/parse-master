@@ -21,14 +21,17 @@
           (define (stack-reduce stack)
             ...)
           (define (setup-helper input stack)
-            (cond [(member (first input) shift-consts)
+            (cond
+              [(empty? input) stack]
+              [(member (first input) shift-consts)
                    (setup-helper (rest input) (stack-shift stack (first input)))]
-                  [(member (first input) reduce-consts)
+              [(member (first input) reduce-consts)
                    (setup-helper (rest input) (stack-reduce stack))]
-                  [else
-                   (cons (first input)
-                         (setup-helper (rest input) stack))]))]
-    (setup-helper input '())))
+              [else
+                   (setup-helper (rest input) (cons (first input) stack))]))]
+    (if (empty? input)
+        (error "no input found")
+        (setup-helper input '()))))
                   
 
 
