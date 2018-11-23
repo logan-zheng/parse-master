@@ -1,6 +1,6 @@
 #lang plai
 (require data/gvector)
-;;We will use the srfi package for multidimensional arrays, it acts much like the vector package and we can use make-array and array-set! for mutable arrays
+;;We will use gvector for multidimensional arrays, it acts much like the vector package and we can use make-gvector and gvector-set! for mutable arrays
 ;;We can make our parse tables using this
 
 
@@ -10,15 +10,28 @@
 ;;We can initialize our constants, static structs, anything else of the sort here
 
 ;;We may need to initialize a global set of static constants
-(define ...)
+(define shift-consts ...)
 
+(define reduce-consts ...)
 
 ;;a bunch of methods here to define stack operations and behaviours...including shift and reduce
-(define (setup-stack)
-  ...)
-
-
-
+(define (setup-stack input)
+  (local [(define (stack-shift stack token)
+            ...)
+          (define (stack-reduce stack)
+            ...)
+          (define (setup-helper input stack)
+            (cond [(member (first input) shift-consts)
+                   (cons (stack-shift stack (first input))
+                        (setup-helper (rest input) stack))]
+                  [(member (first input) reduce-consts)
+                   (cons (stack-reduce stack (first input))
+                         (setup-helper (rest input) stack))]
+                  [else
+                   (cons (first input)
+                         (setup-helper (rest input) stack))]))]
+    (setup-helper input '())))
+                  
 
 
 ;;-----------------------------------------PARSE EBNF---------------------------------------------
