@@ -106,7 +106,7 @@
         (error "no production rules found")
         (for/gvector ([i allProductions]
                       #:when (member (gvector->list i) token))
-          (list (gvector->list i))))))
+          (list i)))))
 
 ;returns a configurating set for a single production and is called once for every new state added to the action table
 ;takes as arguments a single production and a position "pos" that marks the index of the current parse location
