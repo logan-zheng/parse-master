@@ -72,10 +72,10 @@
 ;;)
 
 (define terminals)
-(define grammar (gvector (gvector AE (gvector (gvector num)
-                                              (gvector + AE AE)
-                                              (gvector - AE AE)
-                                              (gvector * AE AE)))))
+(define grammar (gvector AE (gvector (gvector num)
+                                     (gvector + AE AE)
+                                     (gvector - AE AE)
+                                     (gvector * AE AE))))
 
 ;take in a grammar spec, a set of tokens, and a set of allowed terminals, and generate an intermediate grammar that can be directly used to compute follow sets, configurations, and ultimately parse tables
 (define (generate-grammar grammar tokens terminals ...)
@@ -101,7 +101,12 @@
 
 ;Given a nonTerminal token, this function searches the modified grammar for all the productions of this token, and returns them as a list of lists
 (define (search-productions token)
-  ...)
+  (local [(define allProductions (gvector-ref grammar 1))]
+    (if (empty? allProductions)
+        (error "no production rules found")
+        (for/gvector ([i allProductions]
+                      #:when (member (gvector->list i) token))
+          (list i)))))
 
 ;returns a configurating set for a single production and is called once for every new state added to the action table
 ;takes as arguments a single production and a position "pos" that marks the index of the current parse location
